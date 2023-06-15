@@ -6,12 +6,18 @@ import { useState } from "react";
 interface ItemListProps {
   content: string;
   onRemove: () => void;
+  onCheckedItem: () => void;
 }
-export default function ItemList({ content,onRemove }: ItemListProps) {
+export default function ItemList({
+  content,
+  onRemove,
+  onCheckedItem,
+}: ItemListProps) {
   const [itemChecked, setItemChecked] = useState(false);
 
   function handleCheckedItem() {
     setItemChecked((prevState) => !prevState);
+    onCheckedItem()
   }
   const textDecorationLine = itemChecked ? styles.teste : styles.removeLine;
   return (

@@ -10,8 +10,9 @@ export const styles = StyleSheet.create({
     paddingLeft: 8,
     flexDirection: "row",
     alignItems: "center",
-    width: " 100%",
     marginBottom: 12,
+    marginLeft: 24,
+    marginRight: 24,
   },
   text: {
     color: "#F2F2F2",

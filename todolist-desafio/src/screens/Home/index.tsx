@@ -8,34 +8,67 @@ import {
   FlatList,
   Alert,
 } from "react-native";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Header from "../../components/Header";
 import EmptyList from "../../components/EmptyList";
 import ItemList from "../../components/ItemList";
+import uuid from "react-native-uuid";
 
+interface itemListProps {
+  item: string;
+  active: boolean;
+  id: string;
+}
 export default function Home() {
-  const [itemList, setItemList] = useState<string[]>([]);
+  const [itemList, setItemList] = useState<itemListProps[]>([]);
   const [itemListTextInput, setItemListTextInput] = useState("");
+  const onlyItem = itemList.map((el) => el.item);
+  const onlyCompleted = itemList.filter((el) => el.active === true);
 
+  function updateNewItem() {
+    setItemList((prevState) => [
+      ...prevState,
+      { item: itemListTextInput, active: false, id: String(uuid.v4()) },
+    ]);
+    setItemListTextInput("");
+  }
   function handleAddNewItemList() {
-    if (itemList.includes(itemListTextInput)) {
-      Alert.alert("Item já existe!");
+    if (onlyItem.includes(itemListTextInput)) {
+      return Alert.alert("Item já existe!");
+    } else {
+      updateNewItem();
+      setItemListTextInput("");
     }
-    setItemList((prevState) => [...prevState, itemListTextInput]);
-    setItemListTextInput("")
   }
 
   function handleRemoveItemList(item: string) {
     Alert.alert("Deletar item", `Deseja remover o item: ${item}`, [
       {
         text: "Sim",
-        onPress: () => setItemList(prevState => prevState.filter(itemState => itemState !== item))
+        onPress: () =>
+          setItemList((prevState) =>
+            prevState.filter((itemState) => itemState.item !== item)
+          ),
       },
       {
         text: "Não",
-        style: "cancel"
+        style: "cancel",
       },
     ]);
+  }
+
+  function handleCheckedItem(id: string) {
+    const item = itemList.map((item) => {
+      if (item.id === id) {
+        return {
+          ...item,
+          active: !item.active,
+        };
+      } else {
+        return item;
+      }
+    });
+    setItemList(item);
   }
   return (
     <View style={styles.container}>
@@ -61,30 +94,29 @@ export default function Home() {
         <View style={styles.infosList}>
           <View style={styles.countsContainer}>
             <Text style={styles.textCriadas}>Criadas</Text>
-            <Text style={styles.count}>0</Text>
+            <Text style={styles.count}>{itemList.length}</Text>
           </View>
 
           <View style={styles.countsContainer}>
             <Text style={styles.textConcluidas}>Concluídas</Text>
-            <Text style={styles.count}>0</Text>
+            <Text style={styles.count}>{onlyCompleted.length}</Text>
           </View>
         </View>
       </View>
 
-      <View style={styles.containerList}>
-        <FlatList
-          showsVerticalScrollIndicator={false}
-          data={itemList}
-          renderItem={({ item }) => (
-            <ItemList
-              onRemove={() => handleRemoveItemList(item)}
-              content={item}
-            />
-          )}
-          keyExtractor={(item) => item}
-          ListEmptyComponent={<EmptyList />}
-        />
-      </View>
+      <FlatList
+        showsVerticalScrollIndicator={false}
+        data={itemList}
+        keyExtractor={(item) => item.item}
+        renderItem={({ item }) => (
+          <ItemList
+            onCheckedItem={() => handleCheckedItem(item.id)}
+            onRemove={() => handleRemoveItemList(item.item)}
+            content={item.item}
+          />
+        )}
+        ListEmptyComponent={<EmptyList />}
+      />
     </View>
   );
 }
@@ -131,6 +163,7 @@ const styles = StyleSheet.create({
   infosList: {
     flexDirection: "row",
     justifyContent: "space-between",
+    paddingBottom: 24,
   },
   textCriadas: {
     fontSize: 14,
