@@ -1,10 +1,11 @@
-import { View, Text } from 'react-native'
-import React from 'react'
+import React from "react";
+import { Container, Title } from "./styles";
+import Header from "@components/Header";
 
 export default function Groups() {
   return (
-    <View>
-      <Text>Groups</Text>
-    </View>
-  )
+    <Container>
+      <Header />
+    </Container>
+  );
 }
