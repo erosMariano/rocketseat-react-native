@@ -8,9 +8,9 @@
       "@components/*": ["./src/components/*"],
       "@routes/*": ["./src/routes/*"],
       "@screens/*": ["./src/screens/*"],
-      "@storage/*": ["./src/assets/*"],
+      "@storage/*": ["./src/storage/*"],
       "@theme/*": ["./src/theme/*"],
-      "@utils/*": ["./src/assets/*"]
+      "@utils/*": ["./src/utils/*"]
     }
   }
 }
