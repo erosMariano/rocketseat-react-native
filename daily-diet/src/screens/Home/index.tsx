@@ -1,14 +1,14 @@
 import Avatar from "@assets/avatar.png";
 import Logo from "@assets/logo.png";
 import Button from "@components/Button";
+import ListMeal from "@components/ListMeal";
 import PercentageCard from "@components/PercentageCard";
+import { formatDate } from "@utils/FormatDate";
 import React, { useState } from "react";
-import { Image, SectionList, Text } from "react-native";
+import { Image, SectionList } from "react-native";
 import { MealsProps } from "src/@types/types";
 import { Container, Header, Meals, SubtitleHome, Title } from "./styles";
-import { formatDate } from "@utils/FormatDate";
-import ListMeal from "@components/ListMeal";
-
+import { useNavigation } from "@react-navigation/native";
 export default function Home() {
   const [mealsData, setMealsData] = useState<MealsProps[]>([
     {
@@ -44,6 +44,11 @@ export default function Home() {
     },
   ]);
 
+  const navigation = useNavigation();
+
+  function handleStatistics(){
+    navigation.navigate("statistics")
+  }
   return (
     <Container>
       <Header>
@@ -51,11 +56,15 @@ export default function Home() {
         <Image source={Avatar} />
       </Header>
 
-      <PercentageCard percentage={45.86} />
+      <PercentageCard percentage={25.86}  onOpenStatistics={handleStatistics}/>
 
       <Meals>
         <SubtitleHome>Refeições</SubtitleHome>
-        <Button title="Nova refeição" iconName="add" />
+        <Button
+          onPress={() => console.log("Nova refeição")}
+          title="Nova refeição"
+          iconName="add"
+        />
 
         <SectionList
           style={{ marginTop: 32 }}

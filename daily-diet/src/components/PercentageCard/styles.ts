@@ -35,12 +35,15 @@ export const Subtitle = styled.Text`
   `}
 `;
 
-export const OpenIcon =  styled(ArrowUpRight).attrs(({theme}) => ({
+interface OpenIconProps {
+  valueCard: number;
+}
+
+export const OpenIcon = styled(ArrowUpRight).attrs<OpenIconProps>(({ theme, valueCard }) => ({
   size: theme.FONT_SIZE.XL,
-  color: theme.COLORS.GREEN_DARK,
-  weight: "regular"
+  weight: 'regular',
 }))`
   position: absolute; 
   top: 8px;
   right: 8px;
-`
+`;
