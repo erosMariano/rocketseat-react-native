@@ -2,10 +2,16 @@ import ArrowLeft from "phosphor-react-native/src/icons/ArrowLeft";
 import { formatPercentagePoint } from "@utils/formatPercentagePoint";
 import React from "react";
 import { View } from "react-native";
-import { useTheme } from "styled-components";
-import { BackButton, Container, ContainerInfosPercentage, Subtitle, TitleHeader, ValuePercentage } from "./styles";
+import { useTheme } from "styled-components/native";
+import {
+  BackButton,
+  Container,
+  ContainerInfosPercentage,
+  Subtitle,
+  TitleHeader,
+  ValuePercentage,
+} from "./styles";
 import { useNavigation } from "@react-navigation/native";
-
 
 interface HeaderProps {
   title?: string;
@@ -13,9 +19,9 @@ interface HeaderProps {
 }
 export default function Header({ title, percentage }: HeaderProps) {
   const navigation = useNavigation();
-  
-  function handleBackScreen(){
-    navigation.goBack()
+
+  function handleBackScreen() {
+    navigation.goBack();
   }
   const { COLORS } = useTheme();
 
@@ -41,13 +47,14 @@ export default function Header({ title, percentage }: HeaderProps) {
         >
           <ArrowLeft size={24} color={setColorIcon} />
         </BackButton>
-
-        {title && <TitleHeader>Nova refeição</TitleHeader>}
+        {title && <TitleHeader>{title}</TitleHeader>}
       </View>
 
       {percentage && (
         <ContainerInfosPercentage>
-          <ValuePercentage>{formatPercentagePoint(percentage)}%</ValuePercentage>
+          <ValuePercentage>
+            {formatPercentagePoint(percentage)}%
+          </ValuePercentage>
           <Subtitle>das refeições dentro da dieta</Subtitle>
         </ContainerInfosPercentage>
       )}

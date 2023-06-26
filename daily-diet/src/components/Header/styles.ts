@@ -14,14 +14,12 @@ interface BackButtonInfo {
 }
 export const BackButton = styled(TouchableOpacity)<BackButtonInfo>`
   position: ${({ positionValue }) => (positionValue ? "absolute" : "relative")};
-  left: ${({ positionValue }) => (positionValue ? "24px" : "0px")};
   z-index: 1;
 `;
 
 export const TitleHeader = styled.Text`
-  flex: 1;
   text-align: center;
-
+  width: 100%;
   ${({ theme }) => css`
     color: ${theme.COLORS.GRAY_100};
     font-size: ${theme.FONT_SIZE.LG}px;

@@ -3,7 +3,7 @@ import Logo from "@assets/logo.png";
 import Button from "@components/Button";
 import ListMeal from "@components/ListMeal";
 import PercentageCard from "@components/PercentageCard";
-import { formatDate } from "@utils/FormatDate";
+import { formatDate } from "@utils/formatDate";
 import React, { useState } from "react";
 import { Image, SectionList } from "react-native";
 import { MealsProps } from "src/@types/types";
@@ -46,8 +46,16 @@ export default function Home() {
 
   const navigation = useNavigation();
 
-  function handleStatistics(){
-    navigation.navigate("statistics")
+  function handleStatistics() {
+    navigation.navigate("statistics");
+  }
+
+  function handleNewSnack() {
+    navigation.navigate("newSnack");
+  }
+
+  function handleSnack(){
+    navigation.navigate("snack");
   }
   return (
     <Container>
@@ -56,15 +64,11 @@ export default function Home() {
         <Image source={Avatar} />
       </Header>
 
-      <PercentageCard percentage={25.86}  onOpenStatistics={handleStatistics}/>
+      <PercentageCard percentage={80.86} onOpenStatistics={handleStatistics} />
 
       <Meals>
         <SubtitleHome>Refeições</SubtitleHome>
-        <Button
-          onPress={() => console.log("Nova refeição")}
-          title="Nova refeição"
-          iconName="add"
-        />
+        <Button onPress={handleNewSnack} title="Nova refeição" iconName="add" />
 
         <SectionList
           style={{ marginTop: 32 }}
@@ -72,6 +76,7 @@ export default function Home() {
           keyExtractor={(item) => item.id}
           renderItem={({ item }) => (
             <ListMeal
+              onPress={handleSnack}
               foodName={item.foodName}
               hour={item.hour}
               status={item.status}

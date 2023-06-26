@@ -6,13 +6,19 @@ import { TouchableOpacityProps } from "react-native";
 interface ButtonProps extends TouchableOpacityProps {
   title: string;
   iconName?: keyof typeof MaterialIcons.glyphMap;
+  inverseColor?: boolean;
 }
 
-export default function Button({ title, iconName, ...rest }: ButtonProps) {
+export default function Button({
+  title,
+  iconName,
+  inverseColor = false,
+  ...rest
+}: ButtonProps) {
   return (
-    <Container {...rest}>
-      {iconName && <Icon name={iconName} />}
-      <Title>{title}</Title>
+    <Container inverseColor={inverseColor} {...rest}>
+      {iconName && <Icon inverseColor={inverseColor} name={iconName} />}
+      <Title inverseColor={inverseColor}>{title}</Title>
     </Container>
   );
 }
