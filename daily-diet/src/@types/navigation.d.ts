@@ -6,6 +6,7 @@ export declare global {
       newSnack: undefined;
       feedbackCreate: undefined;
       snack: undefined;
+      editSnack: undefined;
     }
   }
 }

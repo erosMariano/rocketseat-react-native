@@ -13,12 +13,26 @@ import {
   TitleHour,
 } from "./styles";
 import Button from "@components/Button";
+import { useNavigation } from "@react-navigation/native";
+import PopupDelete from "@components/PopupDelete";
+import { Alert } from "react-native";
 
 export default function Snack() {
-  const insideDiet = false;
+  const insideDiet = true;
+
+  const navigation = useNavigation();
+
+  function handleEditSnack() {
+    navigation.navigate("editSnack");
+  }
+  function handleDeleteSnack() {
+
+  }
+
   return (
     <Container insideDiet={insideDiet}>
       <Header title="Refeição" />
+      <PopupDelete />
       <Content>
         <Title>Sanduíche</Title>
         <Description>
@@ -34,8 +48,17 @@ export default function Snack() {
         </Tag>
 
         <ContainerButtons>
-          <Button iconName="edit" title="Editar refeição"/>
-          <Button inverseColor iconName="delete" title="Excluir refeição"/>
+          <Button
+            iconName="edit"
+            title="Editar refeição"
+            onPress={handleEditSnack}
+          />
+          <Button
+            inverseColor
+            iconName="delete"
+            title="Excluir refeição"
+            onPress={handleDeleteSnack}
+          />
         </ContainerButtons>
       </Content>
     </Container>
