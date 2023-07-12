@@ -3,42 +3,24 @@ import Logo from "@assets/logo.png";
 import Button from "@components/Button";
 import ListMeal from "@components/ListMeal";
 import PercentageCard from "@components/PercentageCard";
+import { useFocusEffect, useNavigation } from "@react-navigation/native";
 import { formatDate } from "@utils/formatDate";
-import React, { useState } from "react";
+import { getAllSnack } from "@utils/storage/snack/getAllSnack";
+import React, { useCallback, useEffect, useState } from "react";
 import { Image, SectionList } from "react-native";
-import { MealsProps } from "src/@types/types";
+import { MealsProps, SnackProps } from "src/@types/types";
 import { Container, Header, Meals, SubtitleHome, Title } from "./styles";
-import { useNavigation } from "@react-navigation/native";
 export default function Home() {
-  const [mealsData, setMealsData] = useState<MealsProps[]>([
+  const [mealsData, setMealsData] = useState<SnackProps[]>([
     {
       title: new Date(),
       data: [
         {
-          id: "osjaoskaoska",
-          foodName: "X-tudo",
-          description: "Xis completo da lancheria do bairro",
-          hour: 900,
-          status: "NEGATIVE",
-        },
-      ],
-    },
-    {
-      title: new Date(),
-      data: [
-        {
-          id: "osjaoskaos2dasdska",
-          foodName: "X-tudo 2",
-          description: "Xis completo da lancheria do bairro",
-          hour: 900,
-          status: "NEGATIVE",
-        },
-        {
-          id: "osjaosasasaskaos2dasdska",
-          foodName: "X-tudo 3",
-          description: "Xis completo da lancheria do bairro",
-          hour: 900,
-          status: "POSITIVE",
+          description: "teste teste",
+          foodName: "Teste",
+          hour: "1212",
+          id: "76b047e9-22c5-400d-a3b7-c14532d0297b",
+          insideDiet: false,
         },
       ],
     },
@@ -54,9 +36,24 @@ export default function Home() {
     navigation.navigate("newSnack");
   }
 
-  function handleSnack(){
+  function handleSnack() {
     navigation.navigate("snack");
   }
+
+  async function fetchSnacks() {
+    try {
+      const data = await getAllSnack();
+      setMealsData(data);
+    } catch (error) {
+      console.log(error);
+    }
+  }
+  useFocusEffect(
+    useCallback(() => {
+      fetchSnacks();
+    }, [])
+  );
+
   return (
     <Container>
       <Header>
@@ -69,7 +66,6 @@ export default function Home() {
       <Meals>
         <SubtitleHome>Refeições</SubtitleHome>
         <Button onPress={handleNewSnack} title="Nova refeição" iconName="add" />
-
         <SectionList
           style={{ marginTop: 32 }}
           sections={mealsData}
@@ -79,12 +75,12 @@ export default function Home() {
               onPress={handleSnack}
               foodName={item.foodName}
               hour={item.hour}
-              status={item.status}
+              status={item.insideDiet}
             />
           )}
-          renderSectionHeader={({ section: { title } }) => (
-            <Title>{formatDate(title)}</Title>
-          )}
+          renderSectionHeader={({ section: { title } }) => {
+            return <Title>{formatDate(String(title))}</Title>;
+          }}
         />
       </Meals>
     </Container>

@@ -1,5 +1,8 @@
+import Button from "@components/Button";
 import Header from "@components/Header";
-import React from "react";
+import PopupDelete from "@components/PopupDelete";
+import { useNavigation } from "@react-navigation/native";
+import React, { useState } from "react";
 import {
   BulletPoint,
   Container,
@@ -12,27 +15,34 @@ import {
   Title,
   TitleHour,
 } from "./styles";
-import Button from "@components/Button";
-import { useNavigation } from "@react-navigation/native";
-import PopupDelete from "@components/PopupDelete";
-import { Alert } from "react-native";
 
 export default function Snack() {
-  const insideDiet = true;
+  const [openModal, setOpenModal] = useState(false);
 
+  const insideDiet = true;
   const navigation = useNavigation();
 
   function handleEditSnack() {
     navigation.navigate("editSnack");
   }
-  function handleDeleteSnack() {
-
+  function handleOpenModal() {
+    setOpenModal(true);
   }
+
+  function handleCloseModal() {
+    setOpenModal(false);
+  } 
+
+  function handleDeleteSnackInModal(){
+    setOpenModal(false);
+  }
+
+  
 
   return (
     <Container insideDiet={insideDiet}>
       <Header title="Refeição" />
-      <PopupDelete />
+      <PopupDelete onDeleteSnack={handleDeleteSnackInModal} onCloseModal={handleCloseModal} visible={openModal} />
       <Content>
         <Title>Sanduíche</Title>
         <Description>
@@ -57,7 +67,7 @@ export default function Snack() {
             inverseColor
             iconName="delete"
             title="Excluir refeição"
-            onPress={handleDeleteSnack}
+            onPress={handleOpenModal}
           />
         </ContainerButtons>
       </Content>

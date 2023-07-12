@@ -4,9 +4,20 @@ export declare global {
       home: undefined;
       statistics: undefined;
       newSnack: undefined;
-      feedbackCreate: undefined;
+      feedbackCreate: {
+        insideDiet: boolean
+      };
       snack: undefined;
       editSnack: undefined;
     }
   }
 }
+
+// const [infoForm, setInfoForm] = useState({
+//   name: "",
+//   description: "",
+//   date: "",
+//   hour: "",
+//   insideDiet: selectedInsideDiet,
+// });
+

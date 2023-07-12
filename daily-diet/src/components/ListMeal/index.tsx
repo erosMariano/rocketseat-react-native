@@ -11,23 +11,24 @@ import {
 } from "./styles";
 import { TouchableOpacityProps } from "react-native";
 
-interface ListMealProps extends TouchableOpacityProps{
+interface ListMealProps extends TouchableOpacityProps {
   foodName: string;
-  hour: number;
-  status: "POSITIVE" | "NEGATIVE";
+  hour: string;
+  status: boolean;
 }
-export default function ListMeal({ foodName, hour, status, ...rest }: ListMealProps) {
+export default function ListMeal({
+  foodName,
+  hour,
+  status,
+  ...rest
+}: ListMealProps) {
   const { COLORS } = useTheme();
-  const colorStatus = status === "POSITIVE" ? COLORS.GREEN_MID : COLORS.RED_MID;
+  const colorStatus = status ? COLORS.GREEN_MID : COLORS.RED_MID;
 
   return (
     <Container {...rest}>
       <ContainerTitle>
-        <Hour>
-          {String(hour / 60)
-            .padStart(2, ":0")
-            .padEnd(5, ":00")}
-        </Hour>
+        <Hour>{hour}</Hour>
         <SpanLine />
         <Title>{foodName}</Title>
       </ContainerTitle>

@@ -1,6 +1,9 @@
 import styled, { css } from "styled-components/native";
 
-export const Container = styled.View`
+interface PopupDeleteStyle {
+  visible: boolean;
+}
+export const Container = styled.View<PopupDeleteStyle>`
   background-color: rgba(0, 0, 0, 0.25);
   position: absolute;
   top: 0;
@@ -10,7 +13,7 @@ export const Container = styled.View`
   flex: 1;
   z-index: 1;
 
-  display: flex;
+  display: ${({ visible }) => (visible ? "flex" : "none")} ;
   align-items: center;
   justify-content: center;
 `;

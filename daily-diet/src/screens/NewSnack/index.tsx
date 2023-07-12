@@ -4,8 +4,10 @@ import { useNavigation } from "@react-navigation/native";
 import { formatDateNewStack } from "@utils/formatDate";
 import { formatHourNewStack } from "@utils/formatHourNewStack";
 import Circle from "phosphor-react-native/src/icons/Circle";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useTheme } from "styled-components";
+import uuid from "react-native-uuid";
+
 import {
   ButtonDiet,
   Container,
@@ -17,26 +19,81 @@ import {
   RowContainerButtons,
   TitleInput,
 } from "./styles";
+import { createNewSnack } from "@utils/storage/snack/createNewSnack";
+import { SnackProps } from "src/@types/types";
 
 export default function NewSnack() {
   const { COLORS } = useTheme();
-  const navigation = useNavigation()
-  
+  const navigation = useNavigation();
+
   const [selectedInsideDiet, setSelectedInsideDiet] = useState(false);
-  const [infoForm, setInfoForm] = useState({
-    name: "",
-    description: "",
-    date: "",
-    hour: "",
-    insideDiet: false,
+  const [dateFormatted, setDate] = useState("");
+  const [timeFormatted, setTimeFormatted] = useState("");
+
+  const [infoForm, setInfoForm] = useState<SnackProps>({
+    title: new Date(),
+    data: [
+      {
+        id: String(uuid.v4()),
+        foodName: "",
+        description: "",
+        hour: "",
+        insideDiet: false,
+      },
+    ],
   });
 
   function handleSelectInsideDiet(value: boolean) {
     setSelectedInsideDiet(value);
+
+    setInfoForm((prevState) => {
+      const updateData = [...prevState.data];
+      updateData[0].insideDiet = value;
+      return {
+        ...prevState,
+        data: updateData,
+      };
+    });
   }
 
-  function handleSubmitCadasterDiet() {
-    navigation.navigate("feedbackCreate")
+  const handleInputChange = (text: string) => {
+    const formattedDate = formatDateNewStack(text);
+    setDate(formattedDate);
+
+    const day = Number(formattedDate.replaceAll("/", "-").split("-")[0]);
+    const month = Number(formattedDate.replaceAll("/", "-").split("-")[1]) - 1;
+    const year = Number(formattedDate.replaceAll("/", "-").split("-")[2]);
+
+    setInfoForm((prevState) => ({
+      ...prevState,
+      title: new Date(year, month, day),
+    }));
+  };
+
+  const handleTimeChange = (text: string) => {
+    const formattedHour = formatHourNewStack(text);
+    setTimeFormatted(formattedHour);
+
+    setInfoForm((prevState) => {
+      const updateData = [...prevState.data];
+      updateData[0].hour = formattedHour;
+
+      return {
+        ...prevState,
+        data: updateData,
+      };
+    });
+  };
+
+  async function handleSubmitCadasterDiet() {
+    try {
+      const createNewStack = await createNewSnack(infoForm);
+      // navigation.navigate("feedbackCreate", {
+      //   insideDiet: infoForm.data[0].insideDiet,
+      // });
+    } catch (error) {
+      console.log(error);
+    }
   }
 
   return (
@@ -46,7 +103,17 @@ export default function NewSnack() {
       <Content>
         <TitleInput>Nome</TitleInput>
         <Input
-          onChangeText={(text) => setInfoForm({ ...infoForm, name: text })}
+          onChangeText={(text) =>
+            setInfoForm((prevState) => ({
+              ...prevState,
+              data: [
+                {
+                  ...prevState.data[0],
+                  foodName: text,
+                },
+              ],
+            }))
+          }
         />
 
         <TitleInput>Descrição</TitleInput>
@@ -58,7 +125,15 @@ export default function NewSnack() {
             paddingTop: 16,
           }}
           onChangeText={(text) =>
-            setInfoForm({ ...infoForm, description: text })
+            setInfoForm((prevState) => ({
+              ...prevState,
+              data: [
+                {
+                  ...prevState.data[0],
+                  description: text,
+                },
+              ],
+            }))
           }
         />
 
@@ -66,10 +141,10 @@ export default function NewSnack() {
           <DetailsInfo>
             <TitleInput>Data</TitleInput>
             <Input
-              value={formatDateNewStack(infoForm.date)}
+              value={dateFormatted}
               keyboardType="numeric"
               maxLength={10}
-              onChangeText={(text) => setInfoForm({ ...infoForm, date: text })}
+              onChangeText={handleInputChange}
             />
           </DetailsInfo>
 
@@ -77,9 +152,9 @@ export default function NewSnack() {
             <TitleInput>Hora</TitleInput>
             <Input
               maxLength={5}
-              value={formatHourNewStack(infoForm.hour)}
+              value={timeFormatted}
               keyboardType="numeric"
-              onChangeText={(text) => setInfoForm({ ...infoForm, hour: text })}
+              onChangeText={handleTimeChange}
             />
           </DetailsInfo>
         </InfoContainer>

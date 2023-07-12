@@ -36,6 +36,6 @@ export const ImageHighlight = styled.Image`
 `;
 
 export const ContainerButton = styled.View`
-  width: 211px;
+  width: 100%;
   margin: 0 auto;
 `;

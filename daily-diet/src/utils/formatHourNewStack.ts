@@ -1,22 +1,32 @@
 export function formatHourNewStack(data: string) {
-  let cleanedHour = data.replace(/\D/g, "");
+  const digitsOnly = data.replace(/\D/g, ""); // Remove caracteres não numéricos
 
-  // Limitar o valor máximo da hora a 23:59
-  let hour = parseInt(cleanedHour.slice(0, 2));
-  let minute = parseInt(cleanedHour.slice(2));
-
-  if (hour && minute) {
-    if (hour > 23) {
-      hour = 23;
-    }
-
-    if (minute > 59) {
-      minute = 59;
-    }
-
-    cleanedHour = `${hour.toString().padStart(2, "0")}:${minute
-      .toString()
-      .padStart(2, "0")}`;
+  if (digitsOnly.length === 0) {
+    return "";
   }
-  return cleanedHour;
+
+  let formattedTime = "";
+  const hourDigits = digitsOnly.slice(0, 2);
+  const minuteDigits = digitsOnly.slice(2, 4);
+
+  if (hourDigits.length > 0) {
+    const hours = parseInt(hourDigits, 10);
+    if (hours > 23) {
+      return "";
+    }
+    formattedTime += hourDigits;
+  }
+
+  if (minuteDigits.length > 0) {
+    const minutes = parseInt(minuteDigits, 10);
+    if (minutes > 59) {
+      return "";
+    }
+    if (formattedTime.length > 0) {
+      formattedTime += ":";
+    }
+    formattedTime += minuteDigits;
+  }
+
+  return formattedTime;
 }
